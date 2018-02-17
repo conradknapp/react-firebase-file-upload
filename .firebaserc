@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "react-fb": "react-fb-upload",
+    "default": "react-fb-upload"
+  }
+}
