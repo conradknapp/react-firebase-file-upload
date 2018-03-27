@@ -4,7 +4,9 @@ import "./App.css";
 
 class App extends Component {
   state = {
-    selectedFile: null
+    selectedFile: null,
+    progress: 0,
+    resMessage: ""
   };
 
   onFileSelect = event => {
@@ -23,6 +25,11 @@ class App extends Component {
         fd,
         {
           onUploadProgress: ProgressEvent => {
+            this.setState({
+              progress: Math.round(
+                ProgressEvent.loaded / ProgressEvent.total * 100
+              )
+            });
             console.log(
               `upload progress:${Math.round(
                 ProgressEvent.loaded / ProgressEvent.total * 100
@@ -31,7 +38,10 @@ class App extends Component {
           }
         }
       )
-      .then(res => console.log(res))
+      .then(res => {
+        console.log(res);
+        this.setState({ resMessage: res.data.message });
+      })
       .catch(err => console.error(err));
   };
 
@@ -40,6 +50,10 @@ class App extends Component {
       <div className="App">
         <input type="file" onChange={this.onFileSelect} />
         <button onClick={this.onFileUpload}>Upload</button>
+        <progress value={this.state.progress} max="100">
+          {this.state.progress}%
+        </progress>
+        <p>{this.state.resMessage}</p>
       </div>
     );
   }
